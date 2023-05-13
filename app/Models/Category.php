@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+
     use HasFactory;
 
     public $timestamps = false;
+
+    public static function getValidIds(): array
+    {
+        return self::all()->pluck('id')->toArray();
+    }
 }
