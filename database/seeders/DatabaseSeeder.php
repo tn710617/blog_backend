@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $seeders = [
-            TagSeeder::class
+            TagSeeder::class,
+            CategorySeeder::class
         ];
 
         $testingSeeders = [
