@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -17,7 +19,9 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'post_title' => Str::random(),
+            'post_content' => Str::random(1024),
+            'category_id' => $this->faker->randomElement(Category::getValidIds()),
         ];
     }
 }

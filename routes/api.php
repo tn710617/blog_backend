@@ -16,7 +16,7 @@ use App\Http\Controllers\V1\PostController;
 */
 
 /** 文章相關 */
-Route::apiResource('posts', PostController::class)->only('store');
+Route::apiResource('posts', PostController::class)->only(['store', 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

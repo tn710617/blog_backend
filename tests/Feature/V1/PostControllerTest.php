@@ -8,6 +8,7 @@ use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -15,6 +16,73 @@ class PostControllerTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase;
+
+    public function test_can_index_posts()
+    {
+        $tags = Arr::random(Tag::getValidIds(), 2);
+        $tag1 = $tags[0];
+        $tag2 = $tags[1];
+        $postsOneCount = $this->faker->numberBetween(1, 5);
+        $postsTwoCount = $this->faker->numberBetween(1, 5);
+        $totalCount = $postsTwoCount + $postsOneCount;
+        $categoryId = Arr::random(Category::getValidIds());
+        $postsOne = Post::factory()->count($postsOneCount)->create(['category_id' => $categoryId]);
+        $postsOne->each(fn($post) => $post->tags()->sync($tag1));
+
+        $postsOne = Post::factory()->count($postsTwoCount)->create(['category_id' => $categoryId]);
+        $postsOne->each(fn($post) => $post->tags()->sync($tag2));
+
+        $queryOne = http_build_query([
+            'category_id' => $categoryId,
+            'tag_ids' => [$tag1],
+        ]);
+
+        $postsResultOne = $this->getJson(sprintf("%s?%s",
+            route('posts.index'),
+            $queryOne
+        ))->assertOk()->json();
+
+        $this->assertCount($postsOneCount, $postsResultOne['data']);
+
+        foreach ($postsResultOne['data'] as $post) {
+            $this->assertSame($post['tags'][0]['id'], $tag1);
+            $this->assertSame($post['category_id'], $categoryId);
+        }
+
+        $queryTwo = http_build_query([
+            'category_id' => $categoryId,
+            'tag_ids' => [$tag2],
+        ]);
+
+        $postsResultTwo = $this->getJson(sprintf("%s?%s",
+            route('posts.index'),
+            $queryTwo
+        ))->assertOk()->json();
+
+        foreach ($postsResultTwo['data'] as $post) {
+            $this->assertSame($post['tags'][0]['id'], $tag2);
+            $this->assertSame($post['category_id'], $categoryId);
+        }
+
+        $this->travelTo(now()->addSeconds(5));
+
+        $expectedRecentlyCreatedPost = tap($postsOne->random())->update(['created_at' => now()]);
+
+        $result = $this->getJson(route('posts.index'))->json();
+
+        $this->assertSame($result['data'][0]['id'], $expectedRecentlyCreatedPost->getKey());
+
+        $this->travelTo(now()->addSeconds(5));
+
+        $expectedRecentlyUpdatedPost = tap($postsOne->random())->update(['updated_at' => now()]);
+
+        $result = $this->getJson(sprintf('%s?%s', route('posts.index'),
+            http_build_query(['sort' => 'updated_at'])))->json();
+
+        $this->assertSame($result['data'][0]['id'], $expectedRecentlyUpdatedPost->getKey());
+
+        $this->getJson(route('posts.index'))->assertJsonCount($totalCount, 'data');
+    }
 
     public function test_can_create_a_post()
     {
