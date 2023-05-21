@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\PostController;
+use App\Http\Controllers\V1\TagController;
+use App\Http\Controllers\V1\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,15 @@ use App\Http\Controllers\V1\PostController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::group(['prefix' => 'v1'], function () {
+    Route::name('v1.')->group(function () {
+        /** 文章相關 */
+        Route::apiResource('posts', PostController::class)->only(['store', 'index']);
 
-/** 文章相關 */
-Route::apiResource('posts', PostController::class)->only(['store', 'index']);
+        /** 標籤相關 */
+        Route::apiResource('tags', TagController::class)->only(['index']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+        /** 文章類別相關 */
+        Route::apiResource('categories', CategoryController::class)->only(['index']);
+    });
 });

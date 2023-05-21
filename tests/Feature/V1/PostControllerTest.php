@@ -8,7 +8,6 @@ use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -38,7 +37,7 @@ class PostControllerTest extends TestCase
         ]);
 
         $postsResultOne = $this->getJson(sprintf("%s?%s",
-            route('posts.index'),
+            route('v1.posts.index'),
             $queryOne
         ))->assertOk()->json();
 
@@ -55,7 +54,7 @@ class PostControllerTest extends TestCase
         ]);
 
         $postsResultTwo = $this->getJson(sprintf("%s?%s",
-            route('posts.index'),
+            route('v1.posts.index'),
             $queryTwo
         ))->assertOk()->json();
 
@@ -68,7 +67,7 @@ class PostControllerTest extends TestCase
 
         $expectedRecentlyCreatedPost = tap($postsOne->random())->update(['created_at' => now()]);
 
-        $result = $this->getJson(route('posts.index'))->json();
+        $result = $this->getJson(route('v1.posts.index'))->json();
 
         $this->assertSame($result['data'][0]['id'], $expectedRecentlyCreatedPost->getKey());
 
@@ -76,12 +75,12 @@ class PostControllerTest extends TestCase
 
         $expectedRecentlyUpdatedPost = tap($postsOne->random())->update(['updated_at' => now()]);
 
-        $result = $this->getJson(sprintf('%s?%s', route('posts.index'),
+        $result = $this->getJson(sprintf('%s?%s', route('v1.posts.index'),
             http_build_query(['sort' => 'updated_at'])))->json();
 
         $this->assertSame($result['data'][0]['id'], $expectedRecentlyUpdatedPost->getKey());
 
-        $this->getJson(route('posts.index'))->assertJsonCount($totalCount, 'data');
+        $this->getJson(route('v1.posts.index'))->assertJsonCount($totalCount, 'data');
     }
 
     public function test_can_create_a_post()
@@ -92,7 +91,7 @@ class PostControllerTest extends TestCase
         $expectation['tag_ids'] = Arr::random(Tag::getValidIds(), 2);
         $expectation['category_id'] = Arr::random(Category::getValidIds());
 
-        $this->postJson(route('posts.store'), [
+        $this->postJson(route('v1.posts.store'), [
             'post_title' => $expectation['post_title'],
             'post_content' => $expectation['post_content'],
             'tag_ids' => $expectation['tag_ids'],
