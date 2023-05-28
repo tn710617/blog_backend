@@ -16,6 +16,32 @@ class PostControllerTest extends TestCase
 
     use WithFaker, RefreshDatabase;
 
+    public function test_can_show_a_post()
+    {
+        $tagNumber = $this->faker->numberBetween(1, 5);
+        $tags = Tag::all()->random($tagNumber);
+        $post = Post::factory()->hasAttached($tags)->create();
+
+        $this->getJson(route('v1.posts.show', $post))
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    'id' => $post->id,
+                    'post_title' => $post->post_title,
+                    'post_content' => $post->post_content,
+                    'category_id' => $post->category_id,
+                    'category' => [
+                        'id' => $post->category->id,
+                        'category_name' => $post->category->category_name,
+                    ],
+                    'tags' => $tags->map(fn($tag) => [
+                        'id' => $tag->id,
+                        'tag_name' => $tag->tag_name,
+                    ])->toArray(),
+                ]
+            ]);
+    }
+
     public function test_can_index_posts()
     {
         $tags = Arr::random(Tag::getValidIds(), 2);

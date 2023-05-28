@@ -18,7 +18,7 @@ use App\Http\Controllers\V1\CategoryController;
 Route::group(['prefix' => 'v1'], function () {
     Route::name('v1.')->group(function () {
         /** 文章相關 */
-        Route::apiResource('posts', PostController::class)->only(['store', 'index']);
+        Route::apiResource('posts', PostController::class)->only(['store', 'index', 'show']);
 
         /** 標籤相關 */
         Route::apiResource('tags', TagController::class)->only(['index']);

@@ -4,19 +4,26 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\PostCollection;
+use App\Http\Resources\V1\PostResource;
 use App\Models\Post;
 use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidTagId;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+
+    public function show(Post $post)
+    {
+        $post->load(['tags', 'category']);
+
+        return PostResource::make($post);
+    }
 
     public function store(Request $request)
     {
@@ -30,14 +37,16 @@ class PostController extends Controller
 
         $toBeInsertedData = Arr::except($input, ['tag_ids']);
 
-        DB::transaction(function () use ($toBeInsertedData, $input) {
+        $post = DB::transaction(function () use ($toBeInsertedData, $input) {
             $post = Post::create($toBeInsertedData);
             if (isset($input['tag_ids'])) {
                 $post->tags()->attach($input['tag_ids']);
             }
+
+            return $post;
         });
 
-        return response('', Response::HTTP_CREATED);
+        return PostResource::make($post);
     }
 
     public function index(Request $request)
