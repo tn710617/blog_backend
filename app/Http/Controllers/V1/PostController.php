@@ -68,7 +68,7 @@ class PostController extends Controller
                 $postBuilder->whereRelation('category', 'id', $input['category_id']);
             })->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
                 fn(Builder $postBuilder) => $postBuilder->orderByDesc('created_at')
-            )->paginate()->withQueryString();
+            )->paginate(10)->withQueryString();
 
         return PostCollection::make($posts);
     }
