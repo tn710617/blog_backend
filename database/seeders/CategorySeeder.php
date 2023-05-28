@@ -29,11 +29,11 @@ class CategorySeeder extends Seeder
         $this->definedData = [
             [
                 'id' => 1,
-                'category_name' => '程式技術',
+                'category_name' => 'Coding',
             ],
             [
                 'id' => 2,
-                'category_name' => '生活日記',
+                'category_name' => 'Life',
             ],
         ];
     }
