@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         /** 標籤相關 */
         Route::apiResource('tags', TagController::class)->only(['index']);
+        Route::get('popular-tags', [TagController::class, 'indexPopularly'])->name('tags.index.popularly');
 
         /** 文章類別相關 */
         Route::apiResource('categories', CategoryController::class)->only(['index']);

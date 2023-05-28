@@ -24,4 +24,12 @@ class Tag extends Model
     {
         return $this->belongsToMany(Post::class);
     }
+
+    /**
+     * Scopes
+     */
+    public function scopeOfPopular(Builder $query)
+    {
+        return $query->orderBy('used_at', 'desc');
+    }
 }

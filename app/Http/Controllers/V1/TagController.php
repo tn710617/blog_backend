@@ -14,4 +14,9 @@ class TagController extends Controller
     {
         return TagCollection::make(Tag::all());
     }
+
+    public function indexPopularly()
+    {
+        return TagCollection::make(Tag::ofPopular()->take(10)->get());
+    }
 }
