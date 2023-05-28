@@ -64,9 +64,10 @@ class PostController extends Controller
             ->when($input->has('tag_ids'), function (Builder $postBuilder) use ($input) {
                 $postBuilder->whereHas('tags',
                     fn(Builder $tagBuilder) => $tagBuilder->whereIn('tags.id', $input['tag_ids']));
-            })->when($input->has('category_id'), function (Builder $postBuilder) use ($input) {
-                $postBuilder->whereRelation('category', 'id', $input['category_id']);
-            })->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
+            })->when($input->has('category_id') && $input['category_id'] != 1,
+                function (Builder $postBuilder) use ($input) {
+                    $postBuilder->whereRelation('category', 'id', $input['category_id']);
+                })->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
                 fn(Builder $postBuilder) => $postBuilder->orderByDesc('created_at')
             )->paginate(10)->withQueryString();
 
