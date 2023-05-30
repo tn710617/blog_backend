@@ -55,21 +55,28 @@ class PostController extends Controller
             'tag_ids' => ['array', 'nullable'],
             'tag_ids.*' => ['required', new ValidTagId()],
             'category_id' => ['nullable', new ValidCategoryId()],
-            'sort' => ['nullable', Rule::in(['created_at', 'updated_at'])]
+            'sort' => ['nullable', Rule::in(['created_at', 'updated_at'])],
+            'search' => ['nullable', 'string']
         ]);
 
         $input = collect($input)->filter();
 
         $posts = Post::query()->with(['tags', 'category'])
             ->when($input->has('tag_ids'), function (Builder $postBuilder) use ($input) {
-                $postBuilder->whereHas('tags',
-                    fn(Builder $tagBuilder) => $tagBuilder->whereIn('tags.id', $input['tag_ids']));
+                foreach ($input['tag_ids'] as $tagId) {
+                    $postBuilder->whereHas('tags', fn(Builder $tagBuilder) => $tagBuilder->where('tags.id', $tagId));
+                }
             })->when($input->has('category_id') && $input['category_id'] != 1,
                 function (Builder $postBuilder) use ($input) {
                     $postBuilder->whereRelation('category', 'id', $input['category_id']);
                 })->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
                 fn(Builder $postBuilder) => $postBuilder->orderByDesc('created_at')
-            )->paginate(10)->withQueryString();
+            )
+            ->when($input->has('search'),
+                function (Builder $postBuilder) use ($input) {
+                    $postBuilder->whereFullText(['post_title', 'post_content'], $input['search']);
+                })
+            ->paginate(10)->withQueryString();
 
         return PostCollection::make($posts);
     }
