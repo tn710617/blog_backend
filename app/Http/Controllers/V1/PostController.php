@@ -56,7 +56,7 @@ class PostController extends Controller
             'tag_ids.*' => ['required', new ValidTagId()],
             'category_id' => ['nullable', new ValidCategoryId()],
             'sort' => ['nullable', Rule::in(['created_at', 'updated_at'])],
-            'search' => ['nullable', 'string']
+            'search' => ['nullable', 'string'],
         ]);
 
         $input = collect($input)->filter();
