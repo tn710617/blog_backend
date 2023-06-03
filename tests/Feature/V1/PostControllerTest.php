@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\V1;
 
+use App\Helpers\LocaleHelper;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -32,7 +33,7 @@ class PostControllerTest extends TestCase
                     'category_id' => $post->category_id,
                     'category' => [
                         'id' => $post->category->id,
-                        'category_name' => $post->category->category_name,
+                        'category_name' => Str::studly($post->category->category_name,)
                     ],
                     'tags' => $tags->map(fn($tag) => [
                         'id' => $tag->id,
@@ -40,6 +41,17 @@ class PostControllerTest extends TestCase
                     ])->toArray(),
                 ]
             ]);
+    }
+
+    public function test_only_index_public_posts_when_user_is_not_logged_in()
+    {
+        $publicPosts = Post::factory()->count(5)->create(['is_public' => true]);
+        $privatePosts = Post::factory()->count(5)->create(['is_public' => false]);
+
+        $this->getJson(route('v1.posts.index'))
+            ->assertOk()
+            ->assertJsonCount($publicPosts->count(), 'data')
+            ->assertJsonMissing($privatePosts->map(fn($post) => $post->id)->toArray());
     }
 
     public function test_can_index_posts()
@@ -109,25 +121,56 @@ class PostControllerTest extends TestCase
         $this->getJson(route('v1.posts.index'))->assertJsonCount($totalCount, 'data');
     }
 
+    public function test_created_at_will_be_now_if_created_at_is_not_passed()
+    {
+        $this->actingAsUser();
+
+        $this->postJson(route('v1.posts.store'), [
+            'post_title' => Str::random(),
+            'post_content' => $this->faker->paragraph(),
+            'tag_ids' => Arr::random(Tag::getValidIds(), 2),
+            'category_id' => Arr::random(Category::getValidIds()),
+            'is_public' => $this->faker->boolean(),
+            'locale' => $this->faker->randomElement(app(LocaleHelper::class)->getSupportedLocales()),
+        ])->assertCreated();
+
+        $this->assertDatabaseHas(Post::class, [
+            'created_at' => now()->toDateTimeString(),
+        ]);
+    }
+
     public function test_can_create_a_post()
     {
+        $localeHelper = app(LocaleHelper::class);
+
+        $this->actingAsUser();
+
         $expectation = [];
         $expectation['post_title'] = Str::random();
         $expectation['post_content'] = $this->faker->paragraph();
         $expectation['tag_ids'] = Arr::random(Tag::getValidIds(), 2);
         $expectation['category_id'] = Arr::random(Category::getValidIds());
+        $expectation['is_public'] = $this->faker->boolean();
+        $expectation['created_at'] = $this->faker->dateTime()->format('Y-m-d H:i:s');
+        $expectation['locale'] = $this->faker->randomElement($localeHelper->getSupportedLocales());
 
         $this->postJson(route('v1.posts.store'), [
             'post_title' => $expectation['post_title'],
             'post_content' => $expectation['post_content'],
             'tag_ids' => $expectation['tag_ids'],
-            'category_id' => $expectation['category_id']
+            'category_id' => $expectation['category_id'],
+            'is_public' => $expectation['is_public'],
+            'created_at' => $expectation['created_at'],
+            'locale' => $expectation['locale'],
         ])->assertCreated();
 
         $this->assertDatabaseHas(Post::class, [
             'post_title' => $expectation['post_title'],
             'post_content' => $expectation['post_content'],
             'category_id' => $expectation['category_id'],
+            'is_public' => $expectation['is_public'],
+            'created_at' => $expectation['created_at'],
+            'locale' => $localeHelper->normalizeLocale($expectation['locale'])
         ]);
 
         $post = Post::first();

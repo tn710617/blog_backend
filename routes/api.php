@@ -38,7 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
             ])->name('user.auth.get-to-be-signed-message')->middleware(SetLocale::class);
 
         /** 文章相關 */
-        Route::apiResource('posts', PostController::class)->only(['store', 'index', 'show'])->middleware(SetLocale::class);
+        Route::apiResource('posts', PostController::class)->only(['index', 'show'])->middleware(SetLocale::class);
 
         /** 標籤相關 */
         Route::apiResource('tags', TagController::class)->only(['index']);

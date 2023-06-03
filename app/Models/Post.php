@@ -10,7 +10,9 @@ class Post extends Model
 
     use HasFactory;
 
-    protected $fillable = ['post_title', 'post_content', 'category_id', 'created_at', 'updated_at'];
+    protected $fillable = ['post_title', 'post_content', 'category_id', 'created_at', 'updated_at', 'is_public', 'locale'];
+
+    protected $casts = ['is_public' => 'boolean'];
 
     /**
      * Relations

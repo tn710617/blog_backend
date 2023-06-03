@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Helpers\LocaleHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\PostStoreRequest;
 use App\Http\Resources\V1\PostCollection;
 use App\Http\Resources\V1\PostResource;
 use App\Models\Post;
@@ -11,7 +13,7 @@ use App\Rules\V1\ValidTagId;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -25,17 +27,21 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
-    public function store(Request $request)
+    public function store(PostStoreRequest $request, LocaleHelper $localeHelper)
     {
-        $input = $request->validate(rules: [
-            'post_title' => ['required', 'string', Rule::unique(Post::class, 'post_title')],
-            'post_content' => ['nullable', 'string'],
-            'tag_ids' => ['array', 'nullable'],
-            'tag_ids.*' => ['required', new ValidTagId()],
-            'category_id' => ['required', new ValidCategoryId()]
-        ]);
+        $input = $request->safe()->collect();
 
-        $toBeInsertedData = Arr::except($input, ['tag_ids']);
+        if ($input->has('locale')) {
+            $input = $input->merge(['locale' => $localeHelper->normalizeLocale($input['locale'])]);
+        }
+
+        $toBeInsertedData = $input->except(['tag_ids'])->filter(function ($value, $key) {
+            if ($key === 'is_public') {
+                return !is_null($value);
+            }
+
+            return true;
+        })->toArray();
 
         $post = DB::transaction(function () use ($toBeInsertedData, $input) {
             $post = Post::create($toBeInsertedData);
@@ -76,6 +82,7 @@ class PostController extends Controller
                 function (Builder $postBuilder) use ($input) {
                     $postBuilder->whereFullText(['post_title', 'post_content'], $input['search']);
                 })
+            ->when(!Auth::check(), fn(Builder $postBuilder) => $postBuilder->where('is_public', true))
             ->paginate(10)->withQueryString();
 
         return PostCollection::make($posts);

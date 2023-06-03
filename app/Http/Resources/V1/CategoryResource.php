@@ -4,6 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class CategoryResource extends JsonResource
 {
@@ -17,7 +18,7 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'category_name' => __('category.'.$this->category_name),
+            'category_name' => Str::studly(__('category.'.$this->category_name)),
             'category_description' => __('category-description.'.$this->category_name),
         ];
     }

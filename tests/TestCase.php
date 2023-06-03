@@ -23,7 +23,7 @@ abstract class TestCase extends BaseTestCase
         Http::preventStrayRequests();
     }
 
-    protected function actingAsUser(array $userAttributes)
+    protected function actingAsUser(array $userAttributes = [])
     {
         $user = User::factory()->create($userAttributes);
         $this->actingAs($user, 'sanctum');
