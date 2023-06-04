@@ -73,6 +73,10 @@ class TagSeeder extends Seeder
                 'id' => 11,
                 'tag_name' => 'MySQL',
             ],
+            [
+                'id' => 12,
+                'tag_name' => 'CSV',
+            ],
         ];
     }
 
