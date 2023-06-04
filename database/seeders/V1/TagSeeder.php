@@ -65,6 +65,14 @@ class TagSeeder extends Seeder
                 'id' => 9,
                 'tag_name' => 'Tailwind CSS',
             ],
+            [
+                'id' => 10,
+                'tag_name' => 'PHP',
+            ],
+            [
+                'id' => 11,
+                'tag_name' => 'MySQL',
+            ],
         ];
     }
 
