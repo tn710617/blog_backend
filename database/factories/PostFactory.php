@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Helpers\LocaleHelper;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,6 +24,8 @@ class PostFactory extends Factory
             'post_title' => Str::random(),
             'post_content' => Str::random(1024),
             'category_id' => $this->faker->randomElement(Category::getValidIds()),
+            'locale' => $this->faker->randomElement(['en', 'zh_TW']),
+            'user_id' => User::factory()
         ];
     }
 }

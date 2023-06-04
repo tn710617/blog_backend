@@ -19,6 +19,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'post_title' => $this->post_title,
             'post_content' => $this->post_content,
+            'is_public' => $this->is_public,
             'category_id' => $this->category_id,
             'category' => $this->whenLoaded('category', function () {
                 return CategoryResource::make($this->category);
@@ -28,6 +29,7 @@ class PostResource extends JsonResource
             }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'locale' => $this->locale
         ];
     }
 }

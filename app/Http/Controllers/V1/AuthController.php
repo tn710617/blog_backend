@@ -27,6 +27,9 @@ class AuthController extends Controller
             'address' => ['required']
         ]);
 
+        abort_unless(in_array($input['address'], config('custom.admin_wallet_addresses', [])),
+            Response::HTTP_UNAUTHORIZED);
+
         $toBeSignedMessage = session()->pull('to_be_signed_message');
 
         abort_unless(filled($toBeSignedMessage) && $web3Service->verifySignature($toBeSignedMessage,
@@ -35,6 +38,7 @@ class AuthController extends Controller
 
         $user = User::firstOrCreate([
             'wallet_address' => $input['address'],
+            'role' => User::ROLE_ADMIN
         ]);
 
         Auth::guard('web')->login($user);

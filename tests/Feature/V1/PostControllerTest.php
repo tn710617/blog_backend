@@ -6,6 +6,7 @@ use App\Helpers\LocaleHelper;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
@@ -17,11 +18,81 @@ class PostControllerTest extends TestCase
 
     use WithFaker, RefreshDatabase;
 
+    public function test_can_update_a_post_with_duplicate_post_title_if_the_duplicated_post_title_is_its_own()
+    {
+        $post = Post::factory()->create();
+        $expectedPostTitle = $post->post_title;
+
+        $this->actingAs(User::factory()->create())
+            ->putJson(route('v1.posts.update', $post), [
+                'post_title' => $expectedPostTitle,
+            ])
+            ->assertNoContent();
+
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'post_title' => $expectedPostTitle,
+        ]);
+    }
+
+    public function test_can_not_update_a_post_with_existing_post_title_except_its_own_post_title()
+    {
+        $post = Post::factory()->create();
+        $existingPost = Post::factory()->create();
+        $expectedPostTitle = $existingPost->post_title;
+
+        $this->actingAs(User::factory()->create())
+            ->putJson(route('v1.posts.update', $post), [
+                'post_title' => $expectedPostTitle,
+            ])
+            ->assertJsonValidationErrors(['post_title']);
+    }
+
+    public function test_can_update_post()
+    {
+        $post = Post::factory()->create();
+        $expectedLocale = $this->faker->randomElement(['en', 'zh-TW']);
+        $expectedPostTitle = $this->faker->sentence;
+        $expectedPostContent = $this->faker->paragraph;
+        $expectedCategoryId = $this->faker->randomElement(Category::getValidIds());
+        $expectedTagIds = Arr::random(Tag::getValidIds(), $this->faker->numberBetween(1, 5));
+        $expectedIsPublic = $this->faker->boolean;
+        $expectedCreatedAt = $this->faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
+
+        $this->actingAs(User::factory()->create())
+            ->putJson(route('v1.posts.update', $post), [
+                'post_title' => $expectedPostTitle,
+                'post_content' => $expectedPostContent,
+                'category_id' => $expectedCategoryId,
+                'tag_ids' => $expectedTagIds,
+                'is_public' => $expectedIsPublic,
+                'created_at' => $expectedCreatedAt,
+                'locale' => $expectedLocale,
+            ])
+            ->assertNoContent();
+
+        $this->assertDatabaseHas('posts', [
+            'id' => $post->id,
+            'post_title' => $expectedPostTitle,
+            'post_content' => $expectedPostContent,
+            'category_id' => $expectedCategoryId,
+            'locale' => $expectedLocale,
+            'is_public' => $expectedIsPublic,
+            'created_at' => $expectedCreatedAt,
+        ]);
+
+        $this->assertDatabaseHas('post_tag', [
+            'post_id' => $post->id,
+            'tag_id' => $expectedTagIds[0],
+        ]);
+    }
+
     public function test_can_show_a_post()
     {
         $tagNumber = $this->faker->numberBetween(1, 5);
         $tags = Tag::all()->random($tagNumber);
-        $post = Post::factory()->hasAttached($tags)->create();
+        $expectedLocale = $this->faker->randomElement(['en', 'zh_TW']);
+        $post = Post::factory()->hasAttached($tags)->create(['locale' => $expectedLocale]);
 
         $this->getJson(route('v1.posts.show', $post))
             ->assertOk()
@@ -35,6 +106,7 @@ class PostControllerTest extends TestCase
                         'id' => $post->category->id,
                         'category_name' => Str::studly($post->category->category_name,)
                     ],
+                    'locale' => str_replace('_', '-', $expectedLocale),
                     'tags' => $tags->map(fn($tag) => [
                         'id' => $tag->id,
                         'tag_name' => $tag->tag_name,
@@ -45,8 +117,8 @@ class PostControllerTest extends TestCase
 
     public function test_only_index_public_posts_when_user_is_not_logged_in()
     {
-        $publicPosts = Post::factory()->count(5)->create(['is_public' => true]);
-        $privatePosts = Post::factory()->count(5)->create(['is_public' => false]);
+        $publicPosts = Post::factory()->count(5)->create(['is_public' => true, 'locale' => 'en']);
+        $privatePosts = Post::factory()->count(5)->create(['is_public' => false, 'locale' => 'en']);
 
         $this->getJson(route('v1.posts.index'))
             ->assertOk()
@@ -63,10 +135,10 @@ class PostControllerTest extends TestCase
         $postsTwoCount = $this->faker->numberBetween(1, 5);
         $totalCount = $postsTwoCount + $postsOneCount;
         $categoryId = Arr::random(Category::getValidIds());
-        $postsOne = Post::factory()->count($postsOneCount)->create(['category_id' => $categoryId]);
+        $postsOne = Post::factory()->count($postsOneCount)->create(['category_id' => $categoryId, 'locale' => 'en']);
         $postsOne->each(fn($post) => $post->tags()->sync($tag1));
 
-        $postsOne = Post::factory()->count($postsTwoCount)->create(['category_id' => $categoryId]);
+        $postsOne = Post::factory()->count($postsTwoCount)->create(['category_id' => $categoryId, 'locale' => 'en']);
         $postsOne->each(fn($post) => $post->tags()->sync($tag2));
 
         $queryOne = http_build_query([

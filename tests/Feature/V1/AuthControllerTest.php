@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\Web3Service;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -39,10 +40,22 @@ class AuthControllerTest extends TestCase
         $response->assertNoContent();
     }
 
+    public function test_only_user_with_admin_wallet_address_can_login()
+    {
+        $message = $this->get(route('v1.user.auth.get-to-be-signed-message'))->json('data.to_be_signed_message');
+
+        Config::set('custom.admin_wallet_addresses', [Str::random(42)]);
+        $this->postJson(route('v1.user.auth.login.metamask'), [
+            'address' => self::TEST_ETH_ADDRESS,
+            'signature' => app(Web3Service::class)->signMessage($message, self::TEST_ETH_PRIVATE_KEY)
+        ])->assertUnauthorized();
+    }
+
     public function test_a_user_can_login()
     {
         $message = $this->get(route('v1.user.auth.get-to-be-signed-message'))->json('data.to_be_signed_message');
 
+        Config::set('custom.admin_wallet_addresses', [self::TEST_ETH_ADDRESS]);
         $this->postJson(route('v1.user.auth.login.metamask'), [
             'address' => self::TEST_ETH_ADDRESS,
             'signature' => app(Web3Service::class)->signMessage($message, self::TEST_ETH_PRIVATE_KEY)

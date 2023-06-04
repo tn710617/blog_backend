@@ -26,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('is-logged-in', [AuthController::class, 'isLoggedIn'])->name('user.auth.is-logged-in');
 
             /** 文章相關 */
-            Route::apiResource('posts', PostController::class)->only(['store']);
+            Route::apiResource('posts', PostController::class)->only(['store', 'update']);
         });
 
         /** 登入相關 */
@@ -41,8 +41,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::apiResource('posts', PostController::class)->only(['index', 'show'])->middleware(SetLocale::class);
 
         /** 標籤相關 */
-        Route::apiResource('tags', TagController::class)->only(['index']);
-        Route::get('popular-tags', [TagController::class, 'indexPopularly'])->name('tags.index.popularly');
+        Route::apiResource('tags', TagController::class)->only(['index'])->middleware(SetLocale::class);
+        Route::get('popular-tags',
+            [TagController::class, 'indexPopularly'])->name('tags.index.popularly')->middleware(SetLocale::class);
 
         /** 文章類別相關 */
         Route::apiResource('categories', CategoryController::class)->only(['index'])->middleware(SetLocale::class);

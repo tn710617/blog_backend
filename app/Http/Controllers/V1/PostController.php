@@ -5,20 +5,38 @@ namespace App\Http\Controllers\V1;
 use App\Helpers\LocaleHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\PostStoreRequest;
+use App\Http\Requests\V1\PostUpdateRequest;
 use App\Http\Resources\V1\PostCollection;
 use App\Http\Resources\V1\PostResource;
 use App\Models\Post;
+use App\Models\User;
 use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidTagId;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+
+    public function update(PostUpdateRequest $request, Post $post)
+    {
+        $input = $request->safe()->collect()->filterBlankable(['post_content']);
+
+        $toBeUpdatedData = $input->except(['tag_ids'])->toArray();
+
+        $post->update($toBeUpdatedData);
+
+        if (isset($input['tag_ids'])) {
+            $post->tags()->sync($input['tag_ids']);
+        }
+
+        return response()->noContent();
+    }
 
     public function show(Post $post)
     {
@@ -44,7 +62,7 @@ class PostController extends Controller
         })->toArray();
 
         $post = DB::transaction(function () use ($toBeInsertedData, $input) {
-            $post = Post::create($toBeInsertedData);
+            $post = Auth::user()->posts()->create($toBeInsertedData);
             if (isset($input['tag_ids'])) {
                 $post->tags()->attach($input['tag_ids']);
             }
@@ -55,7 +73,7 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, LocaleHelper $localeHelper)
     {
         $input = $request->validate(rules: [
             'tag_ids' => ['array', 'nullable'],
@@ -83,6 +101,7 @@ class PostController extends Controller
                     $postBuilder->whereFullText(['post_title', 'post_content'], $input['search']);
                 })
             ->when(!Auth::check(), fn(Builder $postBuilder) => $postBuilder->where('is_public', true))
+            ->whereLocale($localeHelper->normalizeLocale(App::currentLocale()))
             ->paginate(10)->withQueryString();
 
         return PostCollection::make($posts);
