@@ -38,6 +38,8 @@ class Post extends Model
     {
         return Attribute::make(get: function (string $value) {
             return Str::replace('_', '-', $value);
+        }, set: function (string $value) {
+            return Str::replace('-', '_', $value);
         });
     }
 }

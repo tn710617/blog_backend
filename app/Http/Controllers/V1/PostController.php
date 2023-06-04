@@ -90,10 +90,12 @@ class PostController extends Controller
                 foreach ($input['tag_ids'] as $tagId) {
                     $postBuilder->whereHas('tags', fn(Builder $tagBuilder) => $tagBuilder->where('tags.id', $tagId));
                 }
-            })->when($input->has('category_id') && $input['category_id'] != 1,
+            })
+            ->when($input->has('category_id') && $input['category_id'] != 1,
                 function (Builder $postBuilder) use ($input) {
                     $postBuilder->whereRelation('category', 'id', $input['category_id']);
-                })->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
+                })
+            ->when($input->has('sort'), fn(Builder $postBuilder) => $postBuilder->orderByDesc($input['sort']),
                 fn(Builder $postBuilder) => $postBuilder->orderByDesc('created_at')
             )
             ->when($input->has('search'),
