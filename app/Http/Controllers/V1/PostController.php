@@ -22,6 +22,11 @@ use Illuminate\Validation\Rule;
 class PostController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
+
     public function update(PostUpdateRequest $request, Post $post)
     {
         $input = $request->safe()->collect()->filterBlankable(['post_content']);

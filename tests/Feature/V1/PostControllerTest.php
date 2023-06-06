@@ -18,6 +18,14 @@ class PostControllerTest extends TestCase
 
     use WithFaker, RefreshDatabase;
 
+    public function test_only_admin_can_show_private_post()
+    {
+        $post = Post::factory()->create(['is_public' => false]);
+
+        $this->getJson(route('v1.posts.show', $post))
+            ->assertForbidden();
+    }
+
     public function test_can_update_a_post_with_duplicate_post_title_if_the_duplicated_post_title_is_its_own()
     {
         $post = Post::factory()->create();
@@ -59,7 +67,7 @@ class PostControllerTest extends TestCase
         $expectedIsPublic = $this->faker->boolean;
         $expectedCreatedAt = $this->faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
 
-        $this->actingAs(User::factory()->create())
+        $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
             ->putJson(route('v1.posts.update', $post), [
                 'post_title' => $expectedPostTitle,
                 'post_content' => $expectedPostContent,
@@ -76,7 +84,7 @@ class PostControllerTest extends TestCase
             'post_title' => $expectedPostTitle,
             'post_content' => $expectedPostContent,
             'category_id' => $expectedCategoryId,
-            'locale' => $expectedLocale,
+            'locale' => Str::replace('-', '_', $expectedLocale),
             'is_public' => $expectedIsPublic,
             'created_at' => $expectedCreatedAt,
         ]);
