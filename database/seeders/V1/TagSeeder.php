@@ -81,6 +81,10 @@ class TagSeeder extends Seeder
                 'id' => 13,
                 'tag_name' => 'Git',
             ],
+            [
+                'id' => 14,
+                'tag_name' => 'Apache',
+            ],
         ];
     }
 
