@@ -85,6 +85,10 @@ class TagSeeder extends Seeder
                 'id' => 14,
                 'tag_name' => 'Apache',
             ],
+            [
+                'id' => 15,
+                'tag_name' => 'Blockchain',
+            ],
         ];
     }
 
