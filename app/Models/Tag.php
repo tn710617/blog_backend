@@ -13,6 +13,8 @@ class Tag extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['used_at'];
+
     public static function getValidIds(): array
     {
         return self::all()->pluck('id')->toArray();

@@ -9,6 +9,7 @@ use App\Http\Requests\V1\PostUpdateRequest;
 use App\Http\Resources\V1\PostCollection;
 use App\Http\Resources\V1\PostResource;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidTagId;
 
@@ -37,6 +38,7 @@ class PostController extends Controller
 
         if (isset($input['tag_ids'])) {
             $post->tags()->sync($input['tag_ids']);
+            Tag::whereIn('id', $input['tag_ids'])->touch('used_at');
         }
 
         return response()->noContent();
