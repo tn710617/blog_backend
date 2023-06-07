@@ -18,6 +18,27 @@ class PostControllerTest extends TestCase
 
     use WithFaker, RefreshDatabase;
 
+    public function test_used_at_will_be_touched_when_tags_are_used_to_create_post()
+    {
+        $tag = Tag::all()->random(1)->first();
+
+        $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
+            ->postJson(route('v1.posts.store'), [
+                'post_title' => $this->faker->sentence,
+                'post_content' => $this->faker->paragraph,
+                'category_id' => Category::all()->random(1)->first()->id,
+                'tag_ids' => [$tag->id],
+                'is_public' => true,
+                'locale' => 'en',
+            ])
+            ->assertCreated();
+
+        $this->assertDatabaseHas('tags', [
+            'id' => $tag->id,
+            'used_at' => now()->toDateTimeString(),
+        ]);
+    }
+
     public function test_used_at_will_be_touched_when_tags_are_updated()
     {
         $post = Post::factory()->create();

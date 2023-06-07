@@ -71,6 +71,7 @@ class PostController extends Controller
             $post = Auth::user()->posts()->create($toBeInsertedData);
             if (isset($input['tag_ids'])) {
                 $post->tags()->attach($input['tag_ids']);
+                Tag::whereIn('id', $input['tag_ids'])->touch('used_at');
             }
 
             return $post;
