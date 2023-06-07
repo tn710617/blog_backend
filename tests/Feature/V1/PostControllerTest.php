@@ -18,6 +18,23 @@ class PostControllerTest extends TestCase
 
     use WithFaker, RefreshDatabase;
 
+    public function test_can_delete_a_post()
+    {
+        $post = Post::factory()->create();
+
+        $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
+            ->deleteJson(route('v1.posts.destroy', $post))
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('posts', [
+            'id' => $post->id,
+        ]);
+
+        $this->assertDatabaseMissing('post_tag', [
+            'post_id' => $post->id,
+        ]);
+    }
+
     public function test_used_at_will_be_touched_when_tags_are_used_to_create_post()
     {
         $tag = Tag::all()->random(1)->first();

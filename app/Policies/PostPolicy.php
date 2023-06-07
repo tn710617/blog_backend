@@ -33,7 +33,7 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return filled($user) && $user->is_admin;
     }
 
     /**
@@ -41,15 +41,15 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        return filled($user) && $user->is_admin;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Post $post): bool
+    public function delete(User $user = null, Post $post): bool
     {
-        return $user->is_admin;
+        return filled($user) && $user->is_admin;
     }
 
     /**
@@ -57,14 +57,14 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        return filled($user) && $user->is_admin;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Post $post): bool
+    public function forceDelete(User $user = null, Post $post): bool
     {
-        return $user->is_admin;
+        return filled($user) && $user->is_admin;
     }
 }

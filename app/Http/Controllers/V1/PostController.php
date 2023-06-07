@@ -28,6 +28,16 @@ class PostController extends Controller
         $this->authorizeResource(Post::class, 'post');
     }
 
+    public function destroy(Post $post)
+    {
+        DB::transaction(function () use ($post) {
+            $post->tags()->detach();
+            $post->delete();
+        });
+
+        return response()->noContent();
+    }
+
     public function update(PostUpdateRequest $request, Post $post)
     {
         $input = $request->safe()->collect()->filterBlankable(['post_content']);

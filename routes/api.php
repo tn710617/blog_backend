@@ -26,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('is-logged-in', [AuthController::class, 'isLoggedIn'])->name('user.auth.is-logged-in');
 
             /** 文章相關 */
-            Route::apiResource('posts', PostController::class)->only(['store', 'update']);
+            Route::apiResource('posts', PostController::class)->only(['store', 'update', 'destroy']);
         });
 
         /** 登入相關 */
