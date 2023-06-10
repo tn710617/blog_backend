@@ -36,5 +36,6 @@
   "Backend": "後端",
   "Frontend": "前端",
   "Maintenance": "運維",
-  "Blockchain": "區塊鏈"
+  "Blockchain": "區塊鏈",
+  "Payment Gateway": "金流串接"
 }
