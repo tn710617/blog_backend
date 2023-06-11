@@ -105,6 +105,10 @@ class TagSeeder extends Seeder
                 'id' => 19,
                 'tag_name' => 'Facebook',
             ],
+            [
+                'id' => 20,
+                'tag_name' => 'Google Analytics',
+            ],
         ];
     }
 
