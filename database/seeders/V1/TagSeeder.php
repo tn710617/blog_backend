@@ -101,6 +101,10 @@ class TagSeeder extends Seeder
                 'id' => 18,
                 'tag_name' => 'Payment Gateway',
             ],
+            [
+                'id' => 19,
+                'tag_name' => 'Facebook',
+            ],
         ];
     }
 
