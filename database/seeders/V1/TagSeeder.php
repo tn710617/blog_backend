@@ -109,6 +109,30 @@ class TagSeeder extends Seeder
                 'id' => 20,
                 'tag_name' => 'Google Analytics',
             ],
+            [
+                'id' => 21,
+                'tag_name' => 'AWS',
+            ],
+            [
+                'id' => 22,
+                'tag_name' => 'Infrastructure',
+            ],
+            [
+                'id' => 23,
+                'tag_name' => 'Jenkins',
+            ],
+            [
+                'id' => 24,
+                'tag_name' => 'GitHub',
+            ],
+            [
+                'id' => 25,
+                'tag_name' => 'Kubernetes',
+            ],
+            [
+                'id' => 26,
+                'tag_name' => 'GKE',
+            ],
         ];
     }
 
