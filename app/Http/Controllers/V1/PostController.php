@@ -15,6 +15,7 @@ use App\Rules\V1\ValidTagId;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,13 +70,11 @@ class PostController extends Controller
             $input = $input->merge(['locale' => $localeHelper->normalizeLocale($input['locale'])]);
         }
 
-        $toBeInsertedData = $input->except(['tag_ids'])->filter(function ($value, $key) {
-            if ($key === 'is_public') {
-                return !is_null($value);
-            }
+        $toBeInsertedData = $input->filterBlankable(['post_content'], ['tag_ids'])->toArray();
 
-            return true;
-        })->toArray();
+        if (!Arr::has($toBeInsertedData, 'created_at')) {
+            array_merge($toBeInsertedData, ['created_at' => now()]);
+        }
 
         $post = DB::transaction(function () use ($toBeInsertedData, $input) {
             $post = Auth::user()->posts()->create($toBeInsertedData);
