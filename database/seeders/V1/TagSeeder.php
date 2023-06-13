@@ -145,6 +145,22 @@ class TagSeeder extends Seeder
                 'id' => 29,
                 'tag_name' => 'Blockchain Node',
             ],
+            [
+                'id' => 30,
+                'tag_name' => 'GCP',
+            ],
+            [
+                'id' => 31,
+                'tag_name' => 'GCP Stackdriver',
+            ],
+            [
+                'id' => 32,
+                'tag_name' => 'GCP Compute Engine',
+            ],
+            [
+                'id' => 33,
+                'tag_name' => 'GCP Marketplace',
+            ],
         ];
     }
 
