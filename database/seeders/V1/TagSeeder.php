@@ -133,6 +133,18 @@ class TagSeeder extends Seeder
                 'id' => 26,
                 'tag_name' => 'GKE',
             ],
+            [
+                'id' => 27,
+                'tag_name' => 'Geth',
+            ],
+            [
+                'id' => 28,
+                'tag_name' => 'Prysm',
+            ],
+            [
+                'id' => 29,
+                'tag_name' => 'Blockchain Node',
+            ],
         ];
     }
 
