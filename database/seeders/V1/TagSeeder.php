@@ -161,6 +161,10 @@ class TagSeeder extends Seeder
                 'id' => 33,
                 'tag_name' => 'GCP Marketplace',
             ],
+            [
+                'id' => 34,
+                'tag_name' => 'Hexo',
+            ],
         ];
     }
 
