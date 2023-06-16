@@ -13,6 +13,7 @@ use App\Models\Tag;
 use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidTagId;
 
+use App\Services\MediumService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -62,7 +63,7 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
-    public function store(PostStoreRequest $request, LocaleHelper $localeHelper)
+    public function store(PostStoreRequest $request, LocaleHelper $localeHelper, MediumService $mediumService)
     {
         $input = $request->safe()->collect();
 
@@ -85,6 +86,8 @@ class PostController extends Controller
 
             return $post;
         });
+
+        $mediumService->postUnderPublication($input->toArray(), $post);
 
         return PostResource::make($post);
     }

@@ -39,6 +39,7 @@ class PostStoreRequest extends FormRequest
             'is_public' => ['required', 'boolean'],
             'created_at' => ['nullable', 'date'],
             'locale' => ['required', new ValidLocale()],
+            'should_publish_medium' => ['required', 'boolean']
         ];
     }
 }

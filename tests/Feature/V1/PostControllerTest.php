@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use App\Services\MediumService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
@@ -38,6 +39,9 @@ class PostControllerTest extends TestCase
     public function test_used_at_will_be_touched_when_tags_are_used_to_create_post()
     {
         $tag = Tag::all()->random(1)->first();
+        $this->mock(MediumService::class, function ($mock) {
+            $mock->shouldReceive('postUnderPublication')->once();
+        });
 
         $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
             ->postJson(route('v1.posts.store'), [
@@ -47,6 +51,7 @@ class PostControllerTest extends TestCase
                 'tag_ids' => [$tag->id],
                 'is_public' => true,
                 'locale' => 'en',
+                'should_publish_medium' => false,
             ])
             ->assertCreated();
 
@@ -259,6 +264,7 @@ class PostControllerTest extends TestCase
     public function test_created_at_will_be_now_if_created_at_is_not_passed()
     {
         $this->actingAsUser();
+        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
 
         $this->postJson(route('v1.posts.store'), [
             'post_title' => Str::random(),
@@ -267,6 +273,7 @@ class PostControllerTest extends TestCase
             'category_id' => Arr::random(Category::getValidIds()),
             'is_public' => $this->faker->boolean(),
             'locale' => $this->faker->randomElement(app(LocaleHelper::class)->getSupportedLocales()),
+            'should_publish_medium' => $this->faker->boolean(),
         ])->assertCreated();
 
         $this->assertDatabaseHas(Post::class, [
@@ -277,6 +284,7 @@ class PostControllerTest extends TestCase
     public function test_can_create_a_post()
     {
         $localeHelper = app(LocaleHelper::class);
+        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
 
         $this->actingAsUser();
 
@@ -297,6 +305,7 @@ class PostControllerTest extends TestCase
             'is_public' => $expectation['is_public'],
             'created_at' => $expectation['created_at'],
             'locale' => $expectation['locale'],
+            'should_publish_medium' => $this->faker->boolean()
         ])->assertCreated();
 
         $this->assertDatabaseHas(Post::class, [
