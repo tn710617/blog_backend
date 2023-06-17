@@ -51,7 +51,7 @@ class TagSeeder extends Seeder
             ],
             [
                 'id' => 6,
-                'tag_name' => 'React.js',
+                'tag_name' => 'React',
             ],
             [
                 'id' => 7,
@@ -164,6 +164,26 @@ class TagSeeder extends Seeder
             [
                 'id' => 34,
                 'tag_name' => 'Hexo',
+            ],
+            [
+                'id' => 35,
+                'tag_name' => 'PayPal',
+            ],
+            [
+                'id' => 36,
+                'tag_name' => 'Event Bubbling',
+            ],
+            [
+                'id' => 37,
+                'tag_name' => 'React Effect',
+            ],
+            [
+                'id' => 38,
+                'tag_name' => 'React State',
+            ],
+            [
+                'id' => 39,
+                'tag_name' => 'Frontend',
             ],
         ];
     }
