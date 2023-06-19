@@ -185,6 +185,10 @@ class TagSeeder extends Seeder
                 'id' => 39,
                 'tag_name' => 'Frontend',
             ],
+            [
+                'id' => 40,
+                'tag_name' => 'High Concurrency',
+            ],
         ];
     }
 
