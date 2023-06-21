@@ -197,6 +197,10 @@ class TagSeeder extends Seeder
                 'id' => 42,
                 'tag_name' => 'Jmeter',
             ],
+            [
+                'id' => 43,
+                'tag_name' => 'gopass',
+            ],
         ];
     }
 
