@@ -201,6 +201,58 @@ class TagSeeder extends Seeder
                 'id' => 43,
                 'tag_name' => 'gopass',
             ],
+            [
+                'id' => 44,
+                'tag_name' => 'Docker',
+            ],
+            [
+                'id' => 45,
+                'tag_name' => 'Docker Swarm',
+            ],
+            [
+                'id' => 46,
+                'tag_name' => 'SSH',
+            ],
+            [
+                'id' => 47,
+                'tag_name' => 'Supervisor',
+            ],
+            [
+                'id' => 48,
+                'tag_name' => 'LeetCode',
+            ],
+            [
+                'id' => 49,
+                'tag_name' => 'Algorithm',
+            ],
+            [
+                'id' => 50,
+                'tag_name' => 'Algorithm - Array',
+            ],
+            [
+                'id' => 51,
+                'tag_name' => 'Algorithm - Two Pointers',
+            ],
+            [
+                'id' => 52,
+                'tag_name' => 'GCP Persistence Disk',
+            ],
+            [
+                'id' => 53,
+                'tag_name' => 'Shadowsocks',
+            ],
+            [
+                'id' => 54,
+                'tag_name' => 'Expressjs',
+            ],
+            [
+                'id' => 55,
+                'tag_name' => 'GoDaddy',
+            ],
+            [
+                'id' => 56,
+                'tag_name' => 'MetaMask',
+            ],
         ];
     }
 
