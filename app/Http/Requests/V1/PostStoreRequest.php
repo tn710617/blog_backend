@@ -32,7 +32,8 @@ class PostStoreRequest extends FormRequest
     {
         return [
             'post_title' => [
-                'required', 'string', Rule::unique(Post::class, 'post_title')->where('locale', $this->input('locale'))
+                'required', 'string', Rule::unique(Post::class, 'post_title')->where('locale',
+                    app(LocaleHelper::class)->normalizeLocale($this->input('locale')))
             ],
             'post_content' => ['nullable', 'string'],
             'tag_ids' => ['array', 'nullable'],
