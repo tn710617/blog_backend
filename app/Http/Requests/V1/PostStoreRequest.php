@@ -31,7 +31,9 @@ class PostStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'post_title' => ['required', 'string', Rule::unique(Post::class, 'post_title')],
+            'post_title' => [
+                'required', 'string', Rule::unique(Post::class, 'post_title')->where('locale', $this->input('locale'))
+            ],
             'post_content' => ['nullable', 'string'],
             'tag_ids' => ['array', 'nullable'],
             'tag_ids.*' => ['required', new ValidTagId()],
