@@ -253,6 +253,14 @@ class TagSeeder extends Seeder
                 'id' => 56,
                 'tag_name' => 'MetaMask',
             ],
+            [
+                'id' => 57,
+                'tag_name' => 'PHP-FPM',
+            ],
+            [
+                'id' => 58,
+                'tag_name' => 'Algorithm - Hash Table',
+            ],
         ];
     }
 
