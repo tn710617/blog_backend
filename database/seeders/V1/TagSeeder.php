@@ -261,6 +261,118 @@ class TagSeeder extends Seeder
                 'id' => 58,
                 'tag_name' => 'Algorithm - Hash Table',
             ],
+            [
+                'id' => 59,
+                'tag_name' => 'Markdown',
+            ],
+            [
+                'id' => 60,
+                'tag_name' => 'jq',
+            ],
+            [
+                'id' => 61,
+                'tag_name' => 'command line',
+            ],
+            [
+                'id' => 62,
+                'tag_name' => 'CKEditor',
+            ],
+            [
+                'id' => 63,
+                'tag_name' => 'Algorithm - Linked List',
+            ],
+            [
+                'id' => 64,
+                'tag_name' => 'Algorithm - Traverse',
+            ],
+            [
+                'id' => 65,
+                'tag_name' => 'GCP Cloud Shell',
+            ],
+            [
+                'id' => 66,
+                'tag_name' => 'GCP Gcloud',
+            ],
+            [
+                'id' => 67,
+                'tag_name' => 'Data Structure',
+            ],
+            [
+                'id' => 68,
+                'tag_name' => 'Google',
+            ],
+            [
+                'id' => 69,
+                'tag_name' => 'Apple',
+            ],
+            [
+                'id' => 70,
+                'tag_name' => 'Single Sign-On',
+            ],
+            [
+                'id' => 71,
+                'tag_name' => 'K6',
+            ],
+            [
+                'id' => 72,
+                'tag_name' => 'PHPSTORM',
+            ],
+            [
+                'id' => 73,
+                'tag_name' => 'Laravel Socialite',
+            ],
+            [
+                'id' => 74,
+                'tag_name' => 'Laravel Carbon',
+            ],
+            [
+                'id' => 75,
+                'tag_name' => 'GCP Load Balancer',
+            ],
+            [
+                'id' => 76,
+                'tag_name' => 'Ethereum',
+            ],
+            [
+                'id' => 77,
+                'tag_name' => 'GCP Cloud Logging',
+            ],
+            [
+                'id' => 78,
+                'tag_name' => 'Surasia',
+            ],
+            [
+                'id' => 79,
+                'tag_name' => 'FortVax',
+            ],
+            [
+                'id' => 80,
+                'tag_name' => 'GCP Ops Agent',
+            ],
+            [
+                'id' => 81,
+                'tag_name' => 'AWS SQS',
+            ],
+            [
+                'id' => 82,
+                'tag_name' => 'React Strict Mode',
+            ],
+            [
+                'id' => 83,
+                'tag_name' => 'OOP',
+            ],
+            [
+                'id' => 84,
+                'tag_name' => 'Nginx',
+            ],
+            [
+                'id' => 85,
+                'tag_name' => 'WebDAV',
+            ],
+            [
+                'id' => 86,
+                'tag_name' => 'SFTP',
+            ],
         ];
     }
 
