@@ -12,7 +12,7 @@ class TagController extends Controller
 
     public function index()
     {
-        return TagCollection::make(Tag::orderByDesc('used_at')->get());
+        return TagCollection::make(Tag::orderByDesc('used_at')->get()->sortBy('tag_name'));
     }
 
     public function indexPopularly()

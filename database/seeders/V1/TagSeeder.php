@@ -373,6 +373,10 @@ class TagSeeder extends Seeder
                 'id' => 86,
                 'tag_name' => 'SFTP',
             ],
+            [
+                'id' => 87,
+                'tag_name' => 'FTP',
+            ],
         ];
     }
 
