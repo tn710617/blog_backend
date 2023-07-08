@@ -377,6 +377,18 @@ class TagSeeder extends Seeder
                 'id' => 87,
                 'tag_name' => 'FTP',
             ],
+            [
+                'id' => 88,
+                'tag_name' => 'AWS SES',
+            ],
+            [
+                'id' => 89,
+                'tag_name' => 'PM2',
+            ],
+            [
+                'id' => 90,
+                'tag_name' => 'Travelling',
+            ],
         ];
     }
 
