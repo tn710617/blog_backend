@@ -389,6 +389,10 @@ class TagSeeder extends Seeder
                 'id' => 90,
                 'tag_name' => 'Travelling',
             ],
+            [
+                'id' => 91,
+                'tag_name' => 'React Hook',
+            ],
         ];
     }
 
