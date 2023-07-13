@@ -4,6 +4,7 @@ namespace Tests\Feature\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase

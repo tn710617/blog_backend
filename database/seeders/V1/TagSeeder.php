@@ -131,7 +131,7 @@ class TagSeeder extends Seeder
             ],
             [
                 'id' => 26,
-                'tag_name' => 'GKE',
+                'tag_name' => 'GCP GKE',
             ],
             [
                 'id' => 27,
@@ -392,6 +392,82 @@ class TagSeeder extends Seeder
             [
                 'id' => 91,
                 'tag_name' => 'React Hook',
+            ],
+            [
+                'id' => 92,
+                'tag_name' => 'GCP GKE',
+            ],
+            [
+                'id' => 92,
+                'tag_name' => 'React Render',
+            ],
+            [
+                'id' => 93,
+                'tag_name' => 'GCP IAM',
+            ],
+            [
+                'id' => 94,
+                'tag_name' => 'Laravel Blade',
+            ],
+            [
+                'id' => 95,
+                'tag_name' => 'React Memo',
+            ],
+            [
+                'id' => 96,
+                'tag_name' => 'Anki',
+            ],
+            [
+                'id' => 97,
+                'tag_name' => 'Linux',
+            ],
+            [
+                'id' => 98,
+                'tag_name' => 'MongoDB',
+            ],
+            [
+                'id' => 99,
+                'tag_name' => 'React useMemo',
+            ],
+            [
+                'id' => 100,
+                'tag_name' => 'React useCallback',
+            ],
+            [
+                'id' => 101,
+                'tag_name' => 'NFS',
+            ],
+            [
+                'id' => 102,
+                'tag_name' => 'GCP Cloud Function',
+            ],
+            [
+                'id' => 103,
+                'tag_name' => 'GCP Cloud Storage',
+            ],
+            [
+                'id' => 104,
+                'tag_name' => 'Spinnaker',
+            ],
+            [
+                'id' => 105,
+                'tag_name' => 'Algorithm - Binary Search',
+            ],
+            [
+                'id' => 106,
+                'tag_name' => 'MySQL Redo Log',
+            ],
+            [
+                'id' => 107,
+                'tag_name' => 'MySQL Binlog',
+            ],
+            [
+                'id' => 108,
+                'tag_name' => 'Algorithm - Binary Tree',
+            ],
+            [
+                'id' => 109,
+                'tag_name' => 'Algorithm - Stack',
             ],
         ];
     }
