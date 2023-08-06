@@ -38,6 +38,7 @@ class PostUpdateRequest extends FormRequest
             'is_public' => ['nullable', 'boolean'],
             'created_at' => ['nullable', 'date'],
             'locale' => ['nullable', new ValidLocale()],
+            'should_publish_medium' => ['nullable', 'boolean'],
         ];
     }
 }

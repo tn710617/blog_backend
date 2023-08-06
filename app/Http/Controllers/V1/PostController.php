@@ -15,6 +15,7 @@ use App\Rules\V1\ValidTagId;
 
 use App\Services\MediumService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
@@ -40,7 +41,10 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function update(PostUpdateRequest $request, Post $post)
+    /**
+     * @throws RequestException
+     */
+    public function update(PostUpdateRequest $request, Post $post, MediumService $mediumService)
     {
         $input = $request->safe()->collect()->filterBlankable(['post_content']);
 
@@ -53,6 +57,10 @@ class PostController extends Controller
             Tag::whereIn('id', $input['tag_ids'])->touch('used_at');
         }
 
+        if (app()->isProduction() && $input->has('should_publish_medium') && $input['should_publish_medium']) {
+            $mediumService->postUnderPublication($input->toArray(), $post);
+        }
+
         return response()->noContent();
     }
 
@@ -63,6 +71,9 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function store(PostStoreRequest $request, LocaleHelper $localeHelper, MediumService $mediumService)
     {
         $input = $request->safe()->collect();
@@ -87,7 +98,9 @@ class PostController extends Controller
             return $post;
         });
 
-        $mediumService->postUnderPublication($input->toArray(), $post);
+        if (app()->isProduction() && $input->has('should_publish_medium') && $input['should_publish_medium']) {
+            $mediumService->postUnderPublication($input->toArray(), $post);
+        }
 
         return PostResource::make($post);
     }

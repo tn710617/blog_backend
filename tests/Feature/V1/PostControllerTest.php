@@ -11,6 +11,7 @@ use App\Services\MediumService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -39,9 +40,6 @@ class PostControllerTest extends TestCase
     public function test_used_at_will_be_touched_when_tags_are_used_to_create_post()
     {
         $tag = Tag::all()->random(1)->first();
-        $this->mock(MediumService::class, function ($mock) {
-            $mock->shouldReceive('postUnderPublication')->once();
-        });
 
         $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
             ->postJson(route('v1.posts.store'), [
@@ -264,7 +262,6 @@ class PostControllerTest extends TestCase
     public function test_created_at_will_be_now_if_created_at_is_not_passed()
     {
         $this->actingAsUser();
-        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
 
         $this->postJson(route('v1.posts.store'), [
             'post_title' => Str::random(),
@@ -284,7 +281,6 @@ class PostControllerTest extends TestCase
     public function test_can_create_a_post()
     {
         $localeHelper = app(LocaleHelper::class);
-        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
 
         $this->actingAsUser();
 
@@ -325,5 +321,75 @@ class PostControllerTest extends TestCase
                 'tag_id' => $tagId
             ]);
         }
+    }
+
+    public function test_can_publish_post_on_medium_when_making_a_post()
+    {
+        Http::fake();
+
+        $localeHelper = app(LocaleHelper::class);
+
+        app()['env']  = 'production';
+
+        $this->actingAsUser();
+
+        $expectation = [];
+        $expectation['post_title'] = Str::random();
+        $expectation['post_content'] = $this->faker->paragraph();
+        $expectation['tag_ids'] = Arr::random(Tag::getValidIds(), 2);
+        $expectation['category_id'] = Arr::random(Category::getValidIds());
+        $expectation['is_public'] = $this->faker->boolean();
+        $expectation['created_at'] = $this->faker->dateTime()->format('Y-m-d H:i:s');
+        $expectation['locale'] = $this->faker->randomElement($localeHelper->getSupportedLocales());
+
+        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
+
+        $this->postJson(route('v1.posts.store'), [
+            'post_title' => $expectation['post_title'],
+            'post_content' => $expectation['post_content'],
+            'tag_ids' => $expectation['tag_ids'],
+            'category_id' => $expectation['category_id'],
+            'is_public' => $expectation['is_public'],
+            'created_at' => $expectation['created_at'],
+            'locale' => $expectation['locale'],
+            'should_publish_medium' => true
+        ])->assertCreated();
+
+        app()['env']  = 'testing';
+
+    }
+
+    public function test_can_publish_post_on_medium_when_updating_a_post()
+    {
+        app()['env']  = 'production';
+
+        Http::fake();
+
+        $post = Post::factory()->create();
+        $expectedLocale = $this->faker->randomElement(['en', 'zh-TW']);
+        $expectedPostTitle = $this->faker->sentence;
+        $expectedPostContent = $this->faker->paragraph;
+        $expectedCategoryId = $this->faker->randomElement(Category::getValidIds());
+        $expectedTagIds = Arr::random(Tag::getValidIds(), $this->faker->numberBetween(1, 5));
+        $expectedIsPublic = $this->faker->boolean;
+        $expectedCreatedAt = $this->faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
+
+        $this->mock(MediumService::class)->shouldReceive('postUnderPublication')->once();
+
+        $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]))
+            ->putJson(route('v1.posts.update', $post), [
+                'post_title' => $expectedPostTitle,
+                'post_content' => $expectedPostContent,
+                'category_id' => $expectedCategoryId,
+                'tag_ids' => $expectedTagIds,
+                'is_public' => $expectedIsPublic,
+                'created_at' => $expectedCreatedAt,
+                'locale' => $expectedLocale,
+                'should_publish_medium' => true
+            ])
+            ->assertNoContent();
+
+        app()['env']  = 'testing';
+
     }
 }

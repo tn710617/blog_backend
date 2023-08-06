@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class MediumService
@@ -23,12 +24,11 @@ class MediumService
         $this->urlWithVersion = sprintf('%s/%s', self::BASE_URL, self::VERSION);
     }
 
+    /**
+     * @throws RequestException
+     */
     public function postUnderPublication(array $rawData, Post $post): void
     {
-        if (!$rawData['should_publish_medium'] || !app()->isProduction()) {
-            return;
-        }
-
         $url = sprintf('%s/%s/%s/%s', $this->urlWithVersion, 'publications', $this->publicationId, 'posts');
 
         Http::withToken($this->token)->asJson()->post($url, $this->prepareData($rawData, $post))->throw();
