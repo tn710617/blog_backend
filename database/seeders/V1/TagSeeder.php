@@ -469,6 +469,18 @@ class TagSeeder extends Seeder
                 'id' => 109,
                 'tag_name' => 'Algorithm - Stack',
             ],
+            [
+                'id' => 110,
+                'tag_name' => 'Algorithm - Sliding Window',
+            ],
+            [
+                'id' => 111,
+                'tag_name' => 'WordPress',
+            ],
+            [
+                'id' => 112,
+                'tag_name' => 'Woocommerce',
+            ],
         ];
     }
 
