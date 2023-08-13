@@ -183,7 +183,7 @@ class TagSeeder extends Seeder
             ],
             [
                 'id' => 39,
-                'tag_name' => 'Frontend',
+                'tag_name' => 'Apache Bench',
             ],
             [
                 'id' => 40,
@@ -480,6 +480,26 @@ class TagSeeder extends Seeder
             [
                 'id' => 112,
                 'tag_name' => 'Woocommerce',
+            ],
+            [
+                'id' => 113,
+                'tag_name' => 'DB Isolation Level',
+            ],
+            [
+                'id' => 114,
+                'tag_name' => 'Data Structure - Tree',
+            ],
+            [
+                'id' => 115,
+                'tag_name' => 'Data Structure - Binary Search Tree',
+            ],
+            [
+                'id' => 116,
+                'tag_name' => 'Data Structure - Binary Tree',
+            ],
+            [
+                'id' => 117,
+                'tag_name' => 'Recursion',
             ],
         ];
     }
