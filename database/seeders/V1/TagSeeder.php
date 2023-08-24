@@ -501,6 +501,22 @@ class TagSeeder extends Seeder
                 'id' => 117,
                 'tag_name' => 'Recursion',
             ],
+            [
+                'id' => 118,
+                'tag_name' => 'GCP Pub/Sub',
+            ],
+            [
+                'id' => 119,
+                'tag_name' => 'HTTP',
+            ],
+            [
+                'id' => 120,
+                'tag_name' => 'InfluxDB',
+            ],
+            [
+                'id' => 121,
+                'tag_name' => 'GCP Deployment Manager',
+            ],
         ];
     }
 
