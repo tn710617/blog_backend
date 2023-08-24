@@ -132,9 +132,11 @@ class PostController extends Controller
             )
             ->when($input->has('search'),
                 function (Builder $postBuilder) use ($input) {
-                $searchTerm = "%${input['search']}%";
-                $postBuilder->where('post_title', 'like', $searchTerm)
-                    ->orWhere('post_content', 'like', $searchTerm);
+                    $searchTerm = "%${input['search']}%";
+                    $postBuilder->where(function (Builder $postBuilder) use ($searchTerm) {
+                        $postBuilder->where('post_title', 'like', $searchTerm)
+                            ->orWhere('post_content', 'like', $searchTerm);
+                    });
 //                    $postBuilder->whereFullText(['post_title', 'post_content'], $input['search']);
                 })
             ->when(!Auth::check(), fn(Builder $postBuilder) => $postBuilder->where('is_public', true))
