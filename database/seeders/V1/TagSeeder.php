@@ -517,6 +517,10 @@ class TagSeeder extends Seeder
                 'id' => 121,
                 'tag_name' => 'GCP Deployment Manager',
             ],
+            [
+                'id' => 122,
+                'tag_name' => 'Laradock',
+            ],
         ];
     }
 
