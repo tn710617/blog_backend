@@ -521,6 +521,42 @@ class TagSeeder extends Seeder
                 'id' => 122,
                 'tag_name' => 'Laradock',
             ],
+            [
+                'id' => 123,
+                'tag_name' => 'Let\'s Encrypt',
+            ],
+            [
+                'id' => 124,
+                'tag_name' => 'Redis',
+            ],
+            [
+                'id' => 125,
+                'tag_name' => 'GCP VPC',
+            ],
+            [
+                'id' => 126,
+                'tag_name' => 'Netdata',
+            ],
+            [
+                'id' => 127,
+                'tag_name' => 'OS',
+            ],
+            [
+                'id' => 128,
+                'tag_name' => 'Algorithm - Bubble Sort',
+            ],
+            [
+                'id' => 129,
+                'tag_name' => 'Sequelize',
+            ],
+            [
+                'id' => 130,
+                'tag_name' => 'Lua',
+            ],
+            [
+                'id' => 131,
+                'tag_name' => 'GCP BigQuery',
+            ],
         ];
     }
 
