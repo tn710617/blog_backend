@@ -557,6 +557,10 @@ class TagSeeder extends Seeder
                 'id' => 131,
                 'tag_name' => 'GCP BigQuery',
             ],
+            [
+                'id' => 132,
+                'tag_name' => 'Composer',
+            ],
         ];
     }
 
