@@ -561,6 +561,10 @@ class TagSeeder extends Seeder
                 'id' => 132,
                 'tag_name' => 'Composer',
             ],
+            [
+                'id' => 133,
+                'tag_name' => 'Networking',
+            ],
         ];
     }
 
