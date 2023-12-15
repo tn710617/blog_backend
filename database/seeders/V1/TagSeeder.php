@@ -565,6 +565,22 @@ class TagSeeder extends Seeder
                 'id' => 133,
                 'tag_name' => 'Networking',
             ],
+            [
+                'id' => 134,
+                'tag_name' => 'Pokemon Go',
+            ],
+            [
+                'id' => 135,
+                'tag_name' => 'CFW',
+            ],
+            [
+                'id' => 136,
+                'tag_name' => 'Index',
+            ],
+            [
+                'id' => 137,
+                'tag_name' => 'WireGuard',
+            ],
         ];
     }
 
