@@ -16,17 +16,17 @@ class TagSeeder extends Seeder
         $this->setDefinedData();
     }
 
-    protected $excludedColumns = [
+    protected array $excludedColumns = [
         'used_at'
     ];
-    protected $model = Tag::class;
-    protected $uniqueKey = ['id'];
-    protected $timestamps = false;
-    protected $cacheKeys = [];
-    protected $definedData;
+    protected string $model = Tag::class;
+    protected array $uniqueKey = ['id'];
+    protected bool $timestamps = false;
+    protected array $cacheKeys = [];
+    protected array $definedData;
 
 
-    public function setDefinedData()
+    public function setDefinedData(): void
     {
         $this->definedData = [
             [
@@ -580,6 +580,18 @@ class TagSeeder extends Seeder
             [
                 'id' => 137,
                 'tag_name' => 'WireGuard',
+            ],
+            [
+                'id' => 138,
+                'tag_name' => 'Laravel Reverb',
+            ],
+            [
+                'id' => 139,
+                'tag_name' => 'Laravel Scramble',
+            ],
+            [
+                'id' => 140,
+                'tag_name' => 'API Documentation',
             ],
         ];
     }
