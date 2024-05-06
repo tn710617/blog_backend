@@ -13,7 +13,7 @@ class Tag extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['used_at'];
+    protected $fillable = ['used_at', 'used_count', 'tag_name', 'is_private'];
 
     public static function getValidIds(): array
     {
