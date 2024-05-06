@@ -119,9 +119,9 @@ class PostController extends Controller
 
         $posts = Post::query()->with(['tags', 'category'])
             ->when($input->has('tag_ids'), function (Builder $postBuilder) use ($input) {
-                foreach ($input['tag_ids'] as $tagId) {
-                    $postBuilder->whereHas('tags', fn(Builder $tagBuilder) => $tagBuilder->where('tags.id', $tagId));
-                }
+                $postBuilder->whereHas('tags', function (Builder $tagBuilder) use ($input) {
+                    $tagBuilder->whereIn('tags.id', $input['tag_ids']);
+                });
             })
             ->when($input->has('category_id') && $input['category_id'] != 1,
                 function (Builder $postBuilder) use ($input) {
