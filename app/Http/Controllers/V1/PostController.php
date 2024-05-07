@@ -18,9 +18,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
@@ -29,6 +31,48 @@ class PostController extends Controller
     public function __construct()
     {
         $this->authorizeResource(Post::class, 'post');
+    }
+
+    public function getGroupedPosts(Request $request)
+    {
+        $builder = Post::query();
+
+        if (!$request->user()) {
+            $builder = $builder->whereIsPublic(true);
+        }
+
+        $result = [];
+
+        $builder->select([
+            'id', 'post_title', 'category_id', 'created_at'
+        ])->with(['category:id,category_name'])->orderByDesc('created_at')->get()->each(function (Post $post) use (
+            &$result
+        ) {
+            $year = $post->created_at->format('Y');
+            $monthNumeric = $post->created_at->format('m');
+            $monthString = $post->created_at->format('F');
+
+            if (!isset($result[$year]['article_count'])) {
+                $result[$year]['article_count'] = 0;
+            }
+
+            if (!isset($result[$year]['months'][$monthNumeric]['article_count'])) {
+                $result[$year]['months'][$monthNumeric]['article_count'] = 0;
+            }
+
+            $result[$year]['months'][$monthNumeric]['month_name'] = $monthString;
+
+            $result[$year]['article_count']++;
+            $result[$year]['months'][$monthNumeric]['article_count']++;
+            $result[$year]['months'][$monthNumeric]['posts'][] = [
+                "post_title" => $post->post_title,
+                'category_name' => Str::studly(__('category.'.$post->category->category_name)),
+                "date" => $post->created_at->format('d'),
+                "month" => $post->created_at->format('M'),
+            ];
+        });
+
+        return response()->json(['data' => $result]);
     }
 
     public function destroy(Post $post)
