@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +49,7 @@ class PostController extends Controller
         ) {
             $year = $post->created_at->format('Y');
             $monthNumeric = $post->created_at->format('m');
-            $monthString = $post->created_at->format('F');
+            $monthString = $post->created_at->format('M');
 
             if (!isset($result[$year]['article_count'])) {
                 $result[$year]['article_count'] = 0;
@@ -65,6 +64,7 @@ class PostController extends Controller
             $result[$year]['article_count']++;
             $result[$year]['months'][$monthNumeric]['article_count']++;
             $result[$year]['months'][$monthNumeric]['posts'][] = [
+                "id" => $post->id,
                 "post_title" => $post->post_title,
                 'category_name' => Str::studly(__('category.'.$post->category->category_name)),
                 "date" => $post->created_at->format('d'),
