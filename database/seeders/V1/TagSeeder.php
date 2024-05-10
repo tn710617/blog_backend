@@ -875,6 +875,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 141,
+                'tag_name' => 'Portfolio',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
