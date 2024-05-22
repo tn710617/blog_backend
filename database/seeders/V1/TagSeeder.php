@@ -887,6 +887,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 143,
+                'tag_name' => 'Web Notification',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
