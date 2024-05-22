@@ -881,6 +881,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 142,
+                'tag_name' => 'Service Worker',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
