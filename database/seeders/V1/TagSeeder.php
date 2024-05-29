@@ -893,6 +893,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 144,
+                'tag_name' => 'TNP',
+                'is_private' => true,
+                'used_count' => 0
+            ],
         ];
     }
 
