@@ -899,6 +899,12 @@ class TagSeeder extends Seeder
                 'is_private' => true,
                 'used_count' => 0
             ],
+            [
+                'id' => 145,
+                'tag_name' => 'Diary',
+                'is_private' => true,
+                'used_count' => 0
+            ],
         ];
     }
 
