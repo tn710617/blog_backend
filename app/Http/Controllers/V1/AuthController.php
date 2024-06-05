@@ -34,7 +34,7 @@ class AuthController extends Controller
 
         abort_unless(filled($toBeSignedMessage) && $web3Service->verifySignature($toBeSignedMessage,
                 $input['signature'],
-                $input['address']), Response::HTTP_UNAUTHORIZED);
+                $input['address']), Response::HTTP_UNAUTHORIZED, 'A0010001');
 
         $user = User::firstOrCreate([
             'wallet_address' => $input['address'],
