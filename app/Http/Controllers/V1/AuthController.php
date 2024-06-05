@@ -4,12 +4,11 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WalletToBeSignedMessage;
 use App\Services\Web3Service;
-use Elliptic\EC;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -30,11 +29,12 @@ class AuthController extends Controller
         abort_unless(in_array($input['address'], config('custom.admin_wallet_addresses', [])),
             Response::HTTP_UNAUTHORIZED);
 
-        $toBeSignedMessage = session()->pull('to_be_signed_message');
+        $toBeSignedMessage = WalletToBeSignedMessage::where('wallet_address',
+            $input['address'])->valueOrFail('to_be_signed_message');
 
         abort_unless(filled($toBeSignedMessage) && $web3Service->verifySignature($toBeSignedMessage,
                 $input['signature'],
-                $input['address']), Response::HTTP_UNAUTHORIZED, 'A0010001');
+                $input['address']), Response::HTTP_UNAUTHORIZED);
 
         $user = User::firstOrCreate([
             'wallet_address' => $input['address'],
@@ -46,13 +46,20 @@ class AuthController extends Controller
         return response()->noContent();
     }
 
-    public function getToBeSignedMessage()
+    public function getToBeSignedMessage(Request $request)
     {
         $nonce = Str::random();
 
+        $walletAddress = $request->input('wallet_address');
+
         $message = __('loginMessage.to_be_signed_message', ['nonce' => $nonce]);
 
-        Session::put('to_be_signed_message', $message);
+        WalletToBeSignedMessage::updateOrCreate([
+            'wallet_address' => $walletAddress
+        ], [
+            'to_be_signed_message' => $message
+        ]);
+
 
         return [
             'data' => [
