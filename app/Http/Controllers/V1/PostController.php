@@ -43,8 +43,8 @@ class PostController extends Controller
         $result = [];
 
         $builder->select([
-            'id', 'post_title', 'category_id', 'created_at'
-        ])->with(['category:id,category_name'])->orderByDesc('created_at')->get()->each(function (Post $post) use (
+            'id', 'post_title', 'created_at', 'locale'
+        ])->orderByDesc('created_at')->get()->each(function (Post $post) use (
             &$result
         ) {
             $year = $post->created_at->format('Y');
@@ -66,7 +66,7 @@ class PostController extends Controller
             $result[$year]['months'][$monthNumeric]['posts'][] = [
                 "id" => $post->id,
                 "post_title" => $post->post_title,
-                'category_name' => Str::studly(__('category.'.$post->category->category_name)),
+                'locale' => __('locale.'.$post->locale),
                 "date" => $post->created_at->format('d'),
                 "month" => $post->created_at->format('M'),
             ];
