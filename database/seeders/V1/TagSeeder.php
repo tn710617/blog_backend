@@ -905,6 +905,12 @@ class TagSeeder extends Seeder
                 'is_private' => true,
                 'used_count' => 0
             ],
+            [
+                'id' => 146,
+                'tag_name' => 'GCP Security Policy',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
