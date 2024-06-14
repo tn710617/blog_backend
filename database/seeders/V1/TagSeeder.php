@@ -911,6 +911,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 147,
+                'tag_name' => 'GitLab',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
