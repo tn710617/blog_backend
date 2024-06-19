@@ -917,6 +917,18 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 148,
+                'tag_name' => 'Firebase',
+                'is_private' => false,
+                'used_count' => 0
+            ],
+            [
+                'id' => 149,
+                'tag_name' => 'FCM',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
