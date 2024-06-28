@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class LogRequestResponse
 {
+
     /**
      * Handle an incoming request.
      *
@@ -37,6 +38,7 @@ class LogRequestResponse
             'Cookies:'.PHP_EOL.
             json_encode($cloneRequest->cookie()).
             PHP_EOL.
+            json_encode($request->getClientIps()).
             PHP_EOL.
             json_encode($cloneRequest->all()).
             PHP_EOL.
