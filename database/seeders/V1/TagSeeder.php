@@ -929,6 +929,18 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 150,
+                'tag_name' => 'Design Pattern',
+                'is_private' => false,
+                'used_count' => 0
+            ],
+            [
+                'id' => 151,
+                'tag_name' => 'Next.js',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
