@@ -941,6 +941,18 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 152,
+                'tag_name' => 'Slack',
+                'is_private' => false,
+                'used_count' => 0
+            ],
+            [
+                'id' => 153,
+                'tag_name' => 'Logging',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
