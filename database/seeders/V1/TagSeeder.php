@@ -953,6 +953,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 154,
+                'tag_name' => 'VAPT',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 

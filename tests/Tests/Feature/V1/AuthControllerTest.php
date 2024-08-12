@@ -5,7 +5,6 @@ namespace Tests\Feature\V1;
 use App\Models\User;
 use App\Services\Web3Service;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -17,8 +16,6 @@ class AuthControllerTest extends TestCase
 
     public function test_can_get_to_be_signed_message()
     {
-        $this->withoutExceptionHandling();
-
         $expectation = [
             'wallet_address' => Str::random()
         ];
@@ -97,6 +94,5 @@ class AuthControllerTest extends TestCase
             'signature' => Str::random()
         ])->assertUnauthorized();
     }
-
 
 }
