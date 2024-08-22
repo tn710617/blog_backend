@@ -959,6 +959,18 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 155,
+                'tag_name' => 'GCP Uptime Check',
+                'is_private' => false,
+                'used_count' => 0
+            ],
+            [
+                'id' => 156,
+                'tag_name' => 'Health Check',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
