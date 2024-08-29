@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Helpers\LocaleHelper;
 use App\Models\Post;
 use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidLocale;
@@ -30,7 +31,7 @@ class PostUpdateRequest extends FormRequest
     {
         /** @var Post $post */
         $post = $this->route('post');
-        $locale = Str::replace('-', '_', $post->locale);
+        $locale = app(LocaleHelper::class)->normalizeLocale($post->locale);
 
         return [
             'post_title' => [
