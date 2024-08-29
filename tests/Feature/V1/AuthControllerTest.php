@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\V1;
+namespace Feature\V1;
 
 use App\Models\User;
 use App\Services\Web3Service;
