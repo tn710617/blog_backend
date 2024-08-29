@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\V1;
+namespace Feature\V1;
 
 use App\Helpers\LocaleHelper;
 use App\Models\Category;
@@ -103,8 +103,14 @@ class PostControllerTest extends TestCase
 
     public function test_can_not_update_a_post_with_existing_post_title_except_its_own_post_title()
     {
-        $post = Post::factory()->create();
-        $existingPost = Post::factory()->create();
+        $locale = $this->faker->randomElement(['en', 'zh_TW']);
+
+        $post = Post::factory()->create([
+            'locale' => $locale
+        ]);
+        $existingPost = Post::factory()->create([
+            'locale' => $locale
+        ]);
         $expectedPostTitle = $existingPost->post_title;
 
         $this->actingAs(User::factory()->create())

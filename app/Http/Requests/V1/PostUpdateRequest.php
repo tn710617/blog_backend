@@ -7,6 +7,7 @@ use App\Rules\V1\ValidCategoryId;
 use App\Rules\V1\ValidLocale;
 use App\Rules\V1\ValidTagId;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PostUpdateRequest extends FormRequest
@@ -27,9 +28,14 @@ class PostUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        /** @var Post $post */
+        $post = $this->route('post');
+        $locale = Str::replace('-', '_', $post->locale);
+
         return [
             'post_title' => [
-                'nullable', 'string', Rule::unique(Post::class, 'post_title')->ignore($this->route('post'))
+                'nullable', 'string',
+                Rule::unique(Post::class, 'post_title')->where('locale', $locale)->ignoreModel($post)
             ],
             'post_content' => ['nullable', 'string'],
             'tag_ids' => ['array', 'nullable'],
