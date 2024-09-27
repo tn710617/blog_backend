@@ -971,6 +971,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 157,
+                'tag_name' => 'TypeScript',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
