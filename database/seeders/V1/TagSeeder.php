@@ -977,6 +977,12 @@ class TagSeeder extends Seeder
                 'is_private' => false,
                 'used_count' => 0
             ],
+            [
+                'id' => 158,
+                'tag_name' => 'Reading',
+                'is_private' => false,
+                'used_count' => 0
+            ],
         ];
     }
 
