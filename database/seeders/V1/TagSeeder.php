@@ -937,7 +937,7 @@ class TagSeeder extends Seeder
             ],
             [
                 'id' => 151,
-                'tag_name' => 'Next.js',
+                'tag_name' => 'NextJS',
                 'is_private' => false,
                 'used_count' => 0
             ],
